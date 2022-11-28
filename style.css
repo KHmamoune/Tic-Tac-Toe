@@ -26,7 +26,9 @@ h1 {
 button {
   background-color: rgb(104, 104, 104);
   font-weight: bold;
-  padding: 10px 20px;
+  margin-inline: 30px;
+  width: 120px;
+  height: 40px;
   border-radius: 15px;
   color: white;
 }
@@ -64,4 +66,15 @@ button:hover {
 
 .slot:hover {
   background-color: rgb(124, 124, 124);
+}
+
+.winner {
+  background-color: rgb(124, 124, 124);
+  text-align: center;
+  margin-top: 20px;
+  width: 300px;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
 }

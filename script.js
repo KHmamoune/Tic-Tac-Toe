@@ -1,12 +1,8 @@
-const wincons = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
-const grid = document.querySelector(".board")
+const winner = document.querySelector(".winner")
+const start2 = document.querySelector(".start2")
 const start = document.querySelector(".start")
-const marks = ["X", "O"]
-let players = []
-let board = []
-let tie = false
-let win = true
-let turn = 0
+const grid = document.querySelector(".board")
+const main = document.querySelector(".main")
 
 const gameSlot = (ind) => {
     const index = ind
@@ -22,25 +18,37 @@ const player = (n, m) => {
     return {name, mark}
 }
 
-const gameBoard = (() => {    
+const gameBoard = (() => {   
+    const wincons = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+    const marks = ["X", "O"]
+    let players = []
+    let board = []
+    let tie = false
+    let win = true
+    let turn = 0 
     const startGame = () => {
+        winner.style.display = "none"
+        winner.textContent = "" 
         win = false
         tie = false
         for(let i=0; i<9; i++){
             board[i][0].mark = ""
         }
-        gameBoard.displaySlots()
+        for(let i=0; i<9; i++){
+            board[i][1].textContent = board[i][0].mark
+        }
         gameBoard.createPlayers()
     }
 
     const createPlayers = () => {
         const r = Math.floor(Math.random()*2)
         const player1 = player(prompt("player1 name:"), marks[r])
-        const player2 = player(prompt("player2 name:"), marks[1-r])
+        const player2 = player(prompt("player2 name:"), marks[1-r])    
         players = [player1, player2]
     }
 
     const createBoard = () => {
+        winner.style.display = "none"
         for(let i=0; i<9; i++){
             const slot = document.createElement("div")
             const slotD = gameSlot(i)
@@ -48,6 +56,13 @@ const gameBoard = (() => {
             slot.classList.add("slot")
             slot.addEventListener("mousedown", () => update(slotD.index))
             grid.appendChild(slot)
+        }
+    }
+
+    const update = (index) => {
+        if(board[index][0].mark == "" && win == false){
+            board[index][0].mark = players[turn].mark
+            gameBoard.displaySlots()
         }
     }
 
@@ -92,9 +107,11 @@ const gameBoard = (() => {
 
     const endGame = () => {
         if(tie && !win){
-            alert("it's a tie")
+            winner.style.display = "block"
+            winner.textContent = "it's a tie"
         }else{
-            alert(players[turn].name + " wins")
+            winner.style.display = "block"
+            winner.textContent = players[turn].name + " wins"
         }
 
         for(let i=0; i<9; i++){
@@ -105,15 +122,10 @@ const gameBoard = (() => {
     return{startGame, createPlayers, createBoard, displaySlots, switchTurn, checkWin, endGame}
 })()
 
-function update(index){
-    if(board[index][0].mark == "" && win == false){
-        board[index][0].mark = players[turn].mark
-        gameBoard.displaySlots()
-    }
-}
-
 start.addEventListener("click", () => {
+    gameBoard.state = "player"
     gameBoard.startGame()
     start.textContent = "Restart Game"
 })
+
 gameBoard.createBoard()
